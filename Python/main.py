@@ -29,7 +29,7 @@ def connect_modbus(params):
     )
     return client.connect()
 
-def read_and_send_data(slave_id, address, quantity, poll_delay):
+def read_and_send_data(slave_id, address, quantity, poll_delay, scan_rate):
     global accumulated_value, read_count, start_time, first_read
 
     while not stop_polling.is_set():
@@ -46,7 +46,7 @@ def read_and_send_data(slave_id, address, quantity, poll_delay):
                 accumulated_value += value
                 read_count += 1
 
-                if time.time() - start_time >= 60:
+                if time.time() - start_time >= scan_rate:
                     average_value = accumulated_value / read_count
                     send_to_laravel(average_value)
 
@@ -80,7 +80,7 @@ def connect():
 
     required_params = [
         'com_port', 'baud_rate', 'data_bits', 'parity',
-        'stop_bits', 'response_timeout', 'poll_delay', 'slave_id', 'address', 'quantity'
+        'stop_bits', 'response_timeout', 'poll_delay', 'slave_id', 'address', 'quantity', 'scan_rate'
     ]
 
     missing_params = [param for param in required_params if param not in data]
@@ -95,7 +95,7 @@ def connect():
         stop_polling.clear()
         polling_thread = threading.Thread(
             target=read_and_send_data,
-            args=(data['slave_id'], data['address'], data['quantity'], data['poll_delay'])
+            args=(data['slave_id'], data['address'], data['quantity'], data['poll_delay'], data['scan_rate'])
         )
         polling_thread.start()
         app.logger.debug("Polling started successfully.")

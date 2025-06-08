@@ -13,4 +13,8 @@ class KwhMeterReading extends Model
     protected $fillable = [
         'value'
     ];
+
+    protected $hidden = [
+        'updated_at'
+    ];
 }

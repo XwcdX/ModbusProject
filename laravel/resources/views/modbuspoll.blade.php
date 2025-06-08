@@ -125,8 +125,8 @@
                 <label for="quantity">Quantity: </label>
                 <input type="number" id="quantity" name="quantity" value="10" min="1">
 
-                <label for="scan-rate">Scan Rate (ms): </label>
-                <input type="number" id="scan-rate" name="scan_rate" value="1000" min="100">
+                <label for="scan-rate">Scan Rate (s): </label>
+                <input type="number" id="scan-rate" name="scan_rate" value="60" min="60">
             </fieldset>
             @if ($status && array_key_exists('connected', $status) && !$status['connected'])
                 <button type="submit" id="connect-btn">Connect</button>
