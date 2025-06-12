@@ -34,7 +34,7 @@ def read_and_send_data(slave_id, address, quantity, poll_delay, scan_rate):
 
     while not stop_polling.is_set():
         try:
-            response = client.read_holding_registers(address, quantity, slave=slave_id)
+            response = client.read_holding_registers(address=address, count=quantity, slave=slave_id)
 
             if not response.isError():
                 decoder = BinaryPayloadDecoder.fromRegisters(response.registers, byteorder=Endian.BIG, wordorder=Endian.LITTLE)
